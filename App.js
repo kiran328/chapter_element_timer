@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
+
 import ListItem from "./ListItem";
 
 const DATA = [
@@ -32,6 +33,13 @@ const DATA = [
     title:
       "Consequat et Lorem nostrud dolor sint voluptate anim adipisicing quis eu nostrud proident. Laboris esse minim nostrud commodo pariatur. Minim ut velit ad enim tempor ipsum veniam proident. Dolore anim commodo in reprehenderit velit est id voluptate. Exercitation est ex eu minim velit. Qui Lorem do sint nulla veniam deserunt sit nulla ex duis.Dolor non nostrud incididunt adipisicing eiusmod do eu. Amet adipisicing cupidatat minim officia eu aute nisi. Anim consequat officia sint deserunt eu velit ea ullamco ipsum et.",
     timer: 50000,
+  },
+  
+  {
+    id: "586764a0f-3da1-47134d96-14557e31e29d72",
+    type: "Youtube",
+    youtubeId: "a3ICNMQW7Ok", //"fLeJJPxua3E", //"iPNwzNvqqTc", // "iee2TATGMyI",
+    timer: 1000 * 60 * 60
   },
   {
     id: "58694a0f-3da1-471f-bd96-14557e31e29d72",
@@ -73,6 +81,8 @@ const App = () => {
           <ListItem
             index={index}
             title={item.title}
+            type={item.type}
+            youtubeId={item.youtubeId}
             timer={item.timer}
             visibleItems={visibleItemIndexes}
           />

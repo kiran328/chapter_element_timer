@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import ProgressBar from "./ProgressBar";
 
-const ListItem = ({ title, index, visibleItems, timer }) => {
+import ProgressBar from "./ProgressBar";
+import Youtube from "./Youtube";
+
+const ListItem = ({ title, index, visibleItems, timer, type = "text", youtubeId }) => {
   const [remainingTime, setRemainingTime] = React.useState(timer);
   const [itemBackground, setItemBackground] = React.useState("#fff");
 
@@ -26,15 +28,25 @@ const ListItem = ({ title, index, visibleItems, timer }) => {
     };
   }, [visibleItems.length]);
 
-  return (
-    <View style={{ ...styles.item, backgroundColor: itemBackground }}>
-      <ProgressBar total={timer} remaining={remainingTime} />
+  let content = (
+    <>
       <Text style={styles.title}>
         {index} - {title}
       </Text>
-      <Text style={styles.timerText}>
-        {remainingTime / 1000}
-      </Text>
+      <Text style={styles.timerText}>{remainingTime / 1000}</Text>
+    </>
+  );
+
+  if (type === "Youtube") {
+    content = (
+        <Youtube id={youtubeId} play={itemBackground=="#8ecae6"} />
+    );
+  }
+
+  return (
+    <View style={{ ...styles.item, backgroundColor: itemBackground }}>
+      <ProgressBar total={timer} remaining={remainingTime} />
+      {content}
     </View>
   );
 };
@@ -53,8 +65,8 @@ const styles = StyleSheet.create({
   timerText: {
     fontSize: 17,
     padding: 10,
-    color: 'gray'
-  }
+    color: "gray",
+  },
 });
 
 export default ListItem;
