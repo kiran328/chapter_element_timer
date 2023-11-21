@@ -63,7 +63,8 @@ const App = () => {
   };
 
   const viewabilityConfig = {
-    viewAreaCoveragePercentThreshold: 70,
+    // viewAreaCoveragePercentThreshold: 110,
+    itemVisiblePercentThreshold: 70
     // minimumViewTime: 5000,
   };
 
