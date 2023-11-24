@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 
 import ListItem from "./ListItem";
@@ -34,12 +34,12 @@ const DATA = [
       "Consequat et Lorem nostrud dolor sint voluptate anim adipisicing quis eu nostrud proident. Laboris esse minim nostrud commodo pariatur. Minim ut velit ad enim tempor ipsum veniam proident. Dolore anim commodo in reprehenderit velit est id voluptate. Exercitation est ex eu minim velit. Qui Lorem do sint nulla veniam deserunt sit nulla ex duis.Dolor non nostrud incididunt adipisicing eiusmod do eu. Amet adipisicing cupidatat minim officia eu aute nisi. Anim consequat officia sint deserunt eu velit ea ullamco ipsum et.",
     timer: 50000,
   },
-  
+
   {
     id: "586764a0f-3da1-47134d96-14557e31e29d72",
     type: "Youtube",
     youtubeId: "a3ICNMQW7Ok", //"fLeJJPxua3E", //"iPNwzNvqqTc", // "iee2TATGMyI",
-    timer: 1000 * 60 * 60
+    timer: 1000 * 60 * 60,
   },
   {
     id: "58694a0f-3da1-471f-bd96-14557e31e29d72",
@@ -51,6 +51,8 @@ const DATA = [
 
 const App = () => {
   const [visibleItemIndexes, setVisibleItemIndexes] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const listRef = useRef();
 
   const onViewableItemsChanged = ({ viewableItems, changed }) => {
     const visibleItemIndexArr = viewableItems.map((item) => item.index);
@@ -64,7 +66,7 @@ const App = () => {
 
   const viewabilityConfig = {
     // viewAreaCoveragePercentThreshold: 110,
-    itemVisiblePercentThreshold: 70
+    itemVisiblePercentThreshold: 70,
     // minimumViewTime: 5000,
   };
 
@@ -72,22 +74,41 @@ const App = () => {
     { onViewableItemsChanged, viewabilityConfig },
   ]);
 
+  const handleNavigate = () => {
+    if (DATA.length === currentIndex + 1) return;
+    listRef.current.scrollToIndex({
+      index: currentIndex + 1,
+      animated: true,
+    });
+    setCurrentIndex((prevIndex) => {
+      return prevIndex + 1;
+    });
+  };
+
+  const renderItem = ({ item, index }) => {
+    return (
+      <ListItem
+        index={index}
+        title={item.title}
+        type={item.type}
+        youtubeId={item.youtubeId}
+        timer={item.timer}
+        visibleItems={visibleItemIndexes}
+        onNavigate={handleNavigate}
+      />
+    );
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
+        ref={listRef}
         viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
-        scrollEnabled={true}
+        // scrollEnabled={true}
+        pagingEnabled
+        horizontal
         data={DATA}
-        renderItem={({ item, index }) => (
-          <ListItem
-            index={index}
-            title={item.title}
-            type={item.type}
-            youtubeId={item.youtubeId}
-            timer={item.timer}
-            visibleItems={visibleItemIndexes}
-          />
-        )}
+        renderItem={renderItem}
         keyExtractor={(item) => item.id}
       />
     </View>
@@ -97,8 +118,8 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 40,
-    marginHorizontal: 15,
+    // marginTop: 40,
+    // marginHorizontal: 15,
   },
 });
 

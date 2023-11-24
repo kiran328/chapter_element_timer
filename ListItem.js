@@ -1,10 +1,25 @@
 import React, { useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Button,
+  ScrollView,
+} from "react-native";
 
 import ProgressBar from "./ProgressBar";
 import Youtube from "./Youtube";
 
-const ListItem = ({ title, index, visibleItems, timer, type = "text", youtubeId }) => {
+const ListItem = ({
+  title,
+  index,
+  visibleItems,
+  timer,
+  type = "text",
+  youtubeId,
+  onNavigate,
+}) => {
   const [remainingTime, setRemainingTime] = React.useState(timer);
   const [itemBackground, setItemBackground] = React.useState("#fff");
 
@@ -38,25 +53,29 @@ const ListItem = ({ title, index, visibleItems, timer, type = "text", youtubeId 
   );
 
   if (type === "Youtube") {
-    content = (
-        <Youtube id={youtubeId} play={itemBackground=="#8ecae6"} />
-    );
+    content = <Youtube id={youtubeId} play={itemBackground == "#8ecae6"} />;
   }
 
   return (
-    <View style={{ ...styles.item, backgroundColor: itemBackground }}>
-      <ProgressBar total={timer} remaining={remainingTime} />
-      {content}
-    </View>
+    <ScrollView>
+      <View style={{ ...styles.item, backgroundColor: itemBackground }}>
+        <ProgressBar total={timer} remaining={remainingTime} />
+        {content}
+        <Button onPress={onNavigate} title="Navigate" />
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   item: {
-    marginBottom: 20,
+    // marginBottom: 20,
     borderWidth: 1,
     borderRadius: 5,
     borderColor: "#219ebc",
+    minHeight: Dimensions.get("screen").height,
+    width: Dimensions.get("window").width,
+    overflow: "scroll",
   },
   title: {
     fontSize: 18,
